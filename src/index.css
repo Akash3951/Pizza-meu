@@ -107,6 +107,7 @@ body {
 
 .pizza {
   display: flex;
+  align-items: center;
   gap: 3.2rem;
 }
 
@@ -147,6 +148,31 @@ body {
 .pizza.sold-out img {
   filter: grayscale();
   opacity: 0.8;
+}
+
+/* pizza-count */
+.pizza-count {
+  /* display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 5px;
+  align-items: center;
+  justify-items: center; */
+  display: flex;
+  align-items: center;
+}
+
+.count-btn {
+  width: 30px;
+  color: inherit;
+  font-family: inherit;
+  border: none;
+  font-weight: 500;
+  background-color: #ffdc67;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.count-btn:hover {
+  background-color: #d8a90c;
 }
 
 /* *************** */
