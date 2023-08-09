@@ -1,26 +1,49 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./components/Header";
-import Menu from "./components/Main";
+import Menu from "./components/Menu";
 import Footer from "./components/Footer";
 import "./index.css";
-import { store } from "./features/store";
-import { Provider } from "react-redux";
 
 function App() {
-  // const [count, setCount] = React.useState(0);
+  const [totalItem, setTotalItem] = React.useState([]);
+
+  function updateTotalItem(name, count) {
+    let arr = [];
+    if (totalItem.length === 0) {
+      arr.push({ key: name, total: count });
+    } else {
+      let flag = 0;
+      arr = totalItem.map((item) => {
+        if (item.key === name) {
+          flag = 1;
+          return { ...item, total: count };
+        } else return item;
+      });
+      if (flag === 0) {
+        arr.push({ key: name, total: count });
+      }
+    }
+
+    setTotalItem(arr);
+  }
+
+  // function handleAddItem(name, count) {
+  //   updateTotalItem(name, count);
+  // }
+
+  // function handleMinusItem(name, count) {
+  //   updateTotalItem(name, count);
+  // }
+  console.log(totalItem);
   return (
     <div className="container">
       <Header />
-      <Menu />
-      <Footer />
+      <Menu onAddItem={updateTotalItem} onMinusItem={updateTotalItem} />
+      <Footer totalItem={totalItem} />
     </div>
   );
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <Provider store={store}>
-    <App />
-  </Provider>
-);
+root.render(<App />);

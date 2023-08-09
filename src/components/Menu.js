@@ -1,7 +1,5 @@
 import React from "react";
 import "../index.css";
-import { useSelector, useDispatch } from "react-redux";
-import { decrement, increment } from "../features/counter/counterSlice";
 
 const pizzaData = [
   {
@@ -48,7 +46,7 @@ const pizzaData = [
   },
 ];
 
-export default function Menu() {
+export default function Menu({ onAddItem, onMinusItem }) {
   const pizzas = pizzaData;
   // const pizzas = [];
   const pizzaDataNum = pizzas.length;
@@ -63,7 +61,12 @@ export default function Menu() {
           </p>
           <ul className="pizzas">
             {pizzas.map((pizza) => (
-              <Pizza data={pizza} key={pizza.name} />
+              <Pizza
+                data={pizza}
+                key={pizza.name}
+                onAddItem={onAddItem}
+                onMinusItem={onMinusItem}
+              />
             ))}
           </ul>
         </>
@@ -78,8 +81,7 @@ export default function Menu() {
 }
 
 function Pizza(props) {
-  // if (props.data.soldOut) return null;
-
+  // console.log(props.data);
   return (
     <li className={`pizza ${props.data.soldOut ? "sold-out" : ""}`}>
       <img src={props.data.photoName} alt="pizza" />
@@ -88,29 +90,38 @@ function Pizza(props) {
         <p>{props.data.ingredients}</p>
         <span>{props.data.soldOut ? "SOLD OUT" : props.data.price}</span>
       </div>
-      <span>{props.data.soldOut ? null : <PizzaCount />}</span>
+      <span>
+        {props.data.soldOut ? null : (
+          <PizzaCount
+            name={props.data.name}
+            onAddItem={props.onAddItem}
+            onMinusItem={props.onMinusItem}
+          />
+        )}
+      </span>
     </li>
   );
 }
 
-function PizzaCount() {
-  // function addCount() {
-  //   setCount((prevCount) => prevCount + 1);
-  // }
-  // function subCount() {
-  //   setCount((prevCount) => (prevCount === 0 ? 0 : prevCount - 1));
-  // }
-
-  const count = useSelector((state) => state.counter.value);
-  const dispatch = useDispatch();
+function PizzaCount({ onAddItem, onMinusItem, name }) {
+  const [count, setCount] = React.useState(0);
+  function addCount(e) {
+    console.log(name);
+    onAddItem(name, count + 1);
+    setCount((prevCount) => prevCount + 1);
+  }
+  function subCount() {
+    onMinusItem(name, count === 0 ? 0 : count - 1);
+    setCount((prevCount) => (prevCount === 0 ? 0 : prevCount - 1));
+  }
 
   return (
     <div className="pizza-count">
-      <button className="count-btn" onClick={() => dispatch(increment())}>
+      <button className="count-btn" onClick={addCount}>
         +
       </button>
       <p className="count">{count}</p>
-      <button className="count-btn" onClick={() => dispatch(decrement())}>
+      <button className="count-btn" onClick={subCount}>
         -
       </button>
     </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import "../index.css";
 
-export default function Footer() {
+export default function Footer({ totalItem }) {
   const hour = new Date().getHours();
   const openHour = 0;
   const closeHour = 24;
@@ -10,7 +10,7 @@ export default function Footer() {
     <footer className="footer">
       {isOpen ? (
         <>
-          <Order closeHour={closeHour} />
+          <Order closeHour={closeHour} totalItem={totalItem} />
           {/* <AddedPizza /> */}
         </>
       ) : (
@@ -21,10 +21,19 @@ export default function Footer() {
 }
 
 function Order(props) {
+  console.log(props);
   return (
     <div className="order">
       <p>
         We're open until {props.closeHour}:00. Come visit us or order online.
+      </p>
+      <p>
+        {props.totalItem.map((item) => (
+          <span>
+            {item.key}:<em>{item.total}</em>
+            {"  "}
+          </span>
+        ))}
       </p>
       <button className="btn">Order</button>
     </div>
